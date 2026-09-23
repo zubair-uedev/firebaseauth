@@ -12,6 +12,7 @@ import com.example.firebaseauth.presentation.onboarding.OnBoardingIntent
 import com.example.firebaseauth.presentation.onboarding.OnBoardingScreen
 import com.example.firebaseauth.presentation.onboarding.OnBoardingViewModel
 import com.example.firebaseauth.presentation.signin.SignInScreen
+import com.example.firebaseauth.presentation.signup.SignUpScreen
 import com.example.firebaseauth.presentation.splash.SplashEvent
 import com.example.firebaseauth.presentation.splash.SplashScreen
 import com.example.firebaseauth.presentation.splash.SplashViewModel
@@ -58,6 +59,9 @@ fun Navigation() {
             }
             entry<Routes.SignInRoute> {
                 SignInScreen()
+            }
+            entry<Routes.SignUpRoute> {
+                SignUpScreen()
             }
         }
     )
