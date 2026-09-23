@@ -1,6 +1,7 @@
 package com.example.firebaseauth.presentation.signin
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,11 +33,11 @@ import com.example.firebaseauth.components.TextView
 @Preview(showBackground = true)
 @Composable
 fun SignInScreenPreview() {
-    SignInScreen()
+    SignInScreen(onIntent = {})
 }
 
 @Composable
-fun SignInScreen() {
+fun SignInScreen(onIntent: (OnIntent) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -75,7 +76,7 @@ fun SignInScreen() {
             )
             TextFields(
                 value = "",
-                onValueChange = {  },
+                onValueChange = { },
                 label = "Enter password",
                 visualTransformation = VisualTransformation.None,
                 trailingIcon = {
@@ -110,13 +111,15 @@ fun SignInScreen() {
             ) {
                 TextView(
                     text = "Don't have an account?",
-                    size = 17.sp
+                    size = 17.sp,
+
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 TextView(
                     text = "Sign Up",
                     color = Color.Red,
-                    size = 17.sp
+                    size = 17.sp,
+                    modifier = Modifier.clickable { onIntent(OnIntent.NavigateToSignUp) }
                 )
             }
         }

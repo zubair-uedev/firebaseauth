@@ -8,10 +8,11 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.example.firebaseauth.presentation.onboarding.OnBoardingEvent
-import com.example.firebaseauth.presentation.onboarding.OnBoardingIntent
 import com.example.firebaseauth.presentation.onboarding.OnBoardingScreen
 import com.example.firebaseauth.presentation.onboarding.OnBoardingViewModel
+import com.example.firebaseauth.presentation.signin.OnEvent
 import com.example.firebaseauth.presentation.signin.SignInScreen
+import com.example.firebaseauth.presentation.signin.SignInViewModel
 import com.example.firebaseauth.presentation.signup.SignUpScreen
 import com.example.firebaseauth.presentation.splash.SplashEvent
 import com.example.firebaseauth.presentation.splash.SplashScreen
@@ -58,7 +59,19 @@ fun Navigation() {
                 OnBoardingScreen(onIntent = onBoardingViewModel::onIntent)
             }
             entry<Routes.SignInRoute> {
-                SignInScreen()
+                val signInViewModel: SignInViewModel = koinViewModel()
+                LaunchedEffect(Unit) {
+                    signInViewModel._signInEvents.collect { event ->
+                        when (event) {
+                            OnEvent.GoToSignUpScreen -> {
+                                backStack.add(
+                                    Routes.SignUpRoute
+                                )
+                            }
+                        }
+                    }
+                }
+                SignInScreen(onIntent = signInViewModel::onIntent)
             }
             entry<Routes.SignUpRoute> {
                 SignUpScreen()
