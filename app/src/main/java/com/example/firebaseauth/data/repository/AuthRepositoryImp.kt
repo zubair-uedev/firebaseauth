@@ -50,7 +50,6 @@ class AuthRepositoryImp(private val firebaseAuth: FirebaseAuth) : AuthRepository
             AuthResultCheck.Error(E.message ?: "Something went wrong")
         }
     }
-
     override suspend fun logOut() {
         firebaseAuth.signOut()
     }
