@@ -41,11 +41,18 @@ class AuthRepositoryImp(private val firebaseAuth: FirebaseAuth) : AuthRepository
         email: String,
         password: String
     ): AuthResultCheck {
-        TODO("Not yet implemented")
+        return try {
+            val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            val user = result.user
+            if (user != null) AuthResultCheck.Success(firebase = user)
+            else AuthResultCheck.Error("Login failed, please try again")
+        } catch (E: Exception) {
+            AuthResultCheck.Error(E.message ?: "Something went wrong")
+        }
     }
 
     override suspend fun logOut() {
-        TODO("Not yet implemented")
+        firebaseAuth.signOut()
     }
 
 }
