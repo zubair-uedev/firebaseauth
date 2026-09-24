@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -25,10 +24,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.firebaseauth.R
-import com.example.firebaseauth.components.BaseButton
-import com.example.firebaseauth.components.HeaderSignIn
-import com.example.firebaseauth.components.TextFields
-import com.example.firebaseauth.components.TextView
+import com.example.firebaseauth.shared.components.BaseButton
+import com.example.firebaseauth.shared.components.HeaderSignIn
+import com.example.firebaseauth.shared.components.TextFields
+import com.example.firebaseauth.shared.components.TextView
 
 @Preview(showBackground = true)
 @Composable

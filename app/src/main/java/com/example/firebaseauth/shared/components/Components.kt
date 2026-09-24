@@ -1,4 +1,4 @@
-package com.example.firebaseauth.components
+package com.example.firebaseauth.shared.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -27,7 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.Modifier.Companion
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
