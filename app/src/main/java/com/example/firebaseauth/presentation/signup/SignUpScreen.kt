@@ -1,5 +1,6 @@
 package com.example.firebaseauth.presentation.signup
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,14 +12,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,7 +40,10 @@ fun SignUpScreenPreview() {
 }
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(
+    state: SignupState = SignupState(),
+    onIntent: (SignUpIntent) -> Unit = {}
+) {
     Column(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -66,15 +74,50 @@ fun SignUpScreen() {
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 TextFields(
-                    value = "brola@gmail.com",
-                    onValueChange = {},
+                    value = state.email,
+                    onValueChange = { onIntent(SignUpIntent.EmailChange(it)) },
                     label = "Email Address",
-                    visualTransformation = VisualTransformation.None,
-                    trailingIcon = {}
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+//                    visualTransformation = VisualTransformation.None,
+                    trailingIcon = {},
+                    isError = state.emailError != null
                 )
+
+                AnimatedVisibility(visible = state.emailError != null) {
+                    TextView(
+                        text = state.emailError.orEmpty(),
+                        color = MaterialTheme.colorScheme.error,
+                        size = 12.sp,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Start
+                    )
+                }
                 TextFields(
-                    value = "123456",
-                    onValueChange = {},
+                    value = state.confirmPassword,
+                    onValueChange = { onIntent(SignUpIntent.PassWordChange(it)) },
+                    label = "Enter password",
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    trailingIcon = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_password_),
+                            contentDescription = null
+                        )
+                    },
+                    isError = state.passwordError != null
+                )
+                AnimatedVisibility(visible = state.passwordError != null) {
+                    TextView(
+                        text = state.passwordError.orEmpty(),
+                        color = MaterialTheme.colorScheme.error,
+                        size = 12.sp,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Start
+                    )
+                }
+
+                TextFields(
+                    value = state.confirmPassword,
+                    onValueChange = { onIntent(SignUpIntent.ConfirmPassWordChange(it)) },
                     label = "Enter password",
                     visualTransformation = VisualTransformation.None,
                     trailingIcon = {
@@ -82,26 +125,24 @@ fun SignUpScreen() {
                             painter = painterResource(R.drawable.ic_password_),
                             contentDescription = null
                         )
-                    }
+                    },
+                    isError = state.confirmPasswordError != null
                 )
-                TextFields(
-                    value = "123456",
-                    onValueChange = {},
-                    label = "Enter password",
-                    visualTransformation = VisualTransformation.None,
-                    trailingIcon = {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_password_),
-                            contentDescription = null
-                        )
-                    }
-                )
+                AnimatedVisibility(visible = state.confirmPasswordError != null) {
+                    TextView(
+                        text = state.confirmPasswordError.orEmpty(),
+                        color = MaterialTheme.colorScheme.error,
+                        size = 12.sp,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Start
+                    )
+                }
                 TextView(
                     text = "By signing up, you agree to Ignite's Terms of Service and \n" +
                             "Privacy Policy.",
                 )
                 BaseButton(
-                    onClick = {},
+                    onClick = { onIntent(SignUpIntent.Submit) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 20.dp),
