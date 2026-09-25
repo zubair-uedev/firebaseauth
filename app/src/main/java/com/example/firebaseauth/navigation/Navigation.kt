@@ -7,13 +7,16 @@ import androidx.compose.runtime.getValue
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import com.example.firebaseauth.presentation.dashboard.DashBoardScreen
 import com.example.firebaseauth.presentation.onboarding.OnBoardingEvent
 import com.example.firebaseauth.presentation.onboarding.OnBoardingScreen
 import com.example.firebaseauth.presentation.onboarding.OnBoardingViewModel
 import com.example.firebaseauth.presentation.signin.OnEvent
 import com.example.firebaseauth.presentation.signin.SignInScreen
 import com.example.firebaseauth.presentation.signin.SignInViewModel
+import com.example.firebaseauth.presentation.signup.SignUpEvent
 import com.example.firebaseauth.presentation.signup.SignUpScreen
+import com.example.firebaseauth.presentation.signup.SignUpViewModel
 import com.example.firebaseauth.presentation.splash.SplashEvent
 import com.example.firebaseauth.presentation.splash.SplashScreen
 import com.example.firebaseauth.presentation.splash.SplashViewModel
@@ -61,7 +64,7 @@ fun Navigation() {
             entry<Routes.SignInRoute> {
                 val signInViewModel: SignInViewModel = koinViewModel()
                 LaunchedEffect(Unit) {
-                    signInViewModel._signInEvents.collect { event ->
+                    signInViewModel.signInEvents.collect { event ->
                         when (event) {
                             OnEvent.GoToSignUpScreen -> {
                                 backStack.add(
@@ -74,7 +77,26 @@ fun Navigation() {
                 SignInScreen(onIntent = signInViewModel::onIntent)
             }
             entry<Routes.SignUpRoute> {
-                SignUpScreen()
+                val signUpViewModel: SignUpViewModel = koinViewModel()
+                LaunchedEffect(Unit)
+                {
+                    signUpViewModel.event.collect { event ->
+                        when (event) {
+                            SignUpEvent.Authenticate -> {}
+                            SignUpEvent.NavigateToLogin -> {
+                                backStack.add(Routes.SignInRoute)
+                            }
+
+                            is SignUpEvent.ShowError -> {}
+                        }
+                    }
+                }
+                SignUpScreen(
+                    onIntent = signUpViewModel::onIntent
+                )
+            }
+            entry<Routes.DashBoardRoute> {
+                DashBoardScreen()
             }
         }
     )

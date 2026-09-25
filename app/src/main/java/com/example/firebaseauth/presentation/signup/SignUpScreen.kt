@@ -2,6 +2,7 @@ package com.example.firebaseauth.presentation.signup
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,15 +14,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -96,11 +102,20 @@ fun SignUpScreen(
                     value = state.confirmPassword,
                     onValueChange = { onIntent(SignUpIntent.PassWordChange(it)) },
                     label = "Enter password",
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    // keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         Icon(
-                            painter = painterResource(R.drawable.ic_password_),
-                            contentDescription = null
+                            imageVector = if (state.isPasswordVisible) {
+                                Icons.Default.VisibilityOff
+                            } else {
+                                Icons.Default.Visibility
+                            },
+                            contentDescription = "Toggle Password Visibility",
+                            modifier = Modifier.clickable {
+                                onIntent(SignUpIntent.TogglePasswordVisibility)
+                            }
                         )
                     },
                     isError = state.passwordError != null
@@ -119,7 +134,8 @@ fun SignUpScreen(
                     value = state.confirmPassword,
                     onValueChange = { onIntent(SignUpIntent.ConfirmPassWordChange(it)) },
                     label = "Enter password",
-                    visualTransformation = VisualTransformation.None,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    visualTransformation = PasswordVisualTransformation(),
                     trailingIcon = {
                         Icon(
                             painter = painterResource(R.drawable.ic_password_),
@@ -168,7 +184,10 @@ fun SignUpScreen(
                     TextView(
                         text = "Sign In",
                         color = Color.Red,
-                        size = 17.sp
+                        size = 17.sp,
+                        modifier = Modifier.clickable {
+                            onIntent(SignUpIntent.NavigateToLogin)
+                        }
                     )
                 }
             }

@@ -16,7 +16,7 @@ class SignUpViewModel(private val authRepository: AuthRepository) : ViewModel() 
         private set
     private val _events = MutableSharedFlow<SignUpEvent>()
     val event = _events.asSharedFlow()
-    fun onIntents(signUpIntent: SignUpIntent) {
+    fun onIntent(signUpIntent: SignUpIntent) {
         when (signUpIntent) {
             is SignUpIntent.EmailChange -> {
                 state.value = state.value.copy(email = signUpIntent.value, emailError = null)
