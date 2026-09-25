@@ -1,9 +1,11 @@
 package com.example.firebaseauth.navigation
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
@@ -26,6 +28,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun Navigation() {
     val backStack = rememberNavBackStack(Routes.SplashRoute)
+    val context = LocalContext.current
     NavDisplay(
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },
@@ -82,11 +85,15 @@ fun Navigation() {
                 {
                     signUpViewModel.event.collect { event ->
                         when (event) {
-                            SignUpEvent.Authenticate -> {}
+                            SignUpEvent.Authenticate -> {
+
+                            }
                             SignUpEvent.NavigateToLogin -> {
                                 backStack.add(Routes.SignInRoute)
                             }
-                            is SignUpEvent.ShowError -> {}
+                            is SignUpEvent.ShowError -> {
+                                Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 }
