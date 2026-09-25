@@ -1,5 +1,6 @@
 package com.example.firebaseauth.presentation.signin
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,20 +13,26 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.firebaseauth.R
 import com.example.firebaseauth.shared.components.BaseButton
 import com.example.firebaseauth.shared.components.HeaderSignIn
+import com.example.firebaseauth.shared.components.LoadingOverlay
 import com.example.firebaseauth.shared.components.TextFields
 import com.example.firebaseauth.shared.components.TextView
 
@@ -36,7 +43,10 @@ fun SignInScreenPreview() {
 }
 
 @Composable
-fun SignInScreen(onIntent: (OnIntent) -> Unit) {
+fun SignInScreen(
+    state: LoginState = LoginState(),
+    onIntent: (OnIntent) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -67,30 +77,59 @@ fun SignInScreen(onIntent: (OnIntent) -> Unit) {
         ) {
 
             TextFields(
-                value = "",
-                onValueChange = { },
+                value = state.email,
+                onValueChange = { onIntent(OnIntent.EmailChange(it)) },
                 label = "Email Address",
-                visualTransformation = VisualTransformation.None,
-                trailingIcon = {}
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                isError = state.emailError != null
             )
+            AnimatedVisibility(visible = state.emailError != null) {
+                TextView(
+                    text = state.emailError.orEmpty(),
+                    color = MaterialTheme.colorScheme.error,
+                    size = 12.sp,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Start
+                )
+            }
             TextFields(
-                value = "",
-                onValueChange = { },
+                value = state.passWord,
+                onValueChange = { onIntent(OnIntent.PasswordChange(it)) },
                 label = "Enter password",
-                visualTransformation = VisualTransformation.None,
+                isError = state.passwordError != null,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     Icon(
-                        painter = painterResource(R.drawable.ic_password_),
-                        contentDescription = null
+                        painter = painterResource(
+                            if (state.isPasswordVisible) {
+                                R.drawable.ic_password_
+                            } else {
+                                R.drawable.ic_password_
+                            }
+                        ),
+                        contentDescription = "Toggle Password Visibility",
+                        modifier = Modifier.clickable {
+                            onIntent(OnIntent.TogglePasswordVisibility)
+                        }
                     )
                 }
             )
+            AnimatedVisibility(visible = state.passwordError != null) {
+                TextView(
+                    text = state.passwordError.orEmpty(),
+                    color = MaterialTheme.colorScheme.error,
+                    size = 12.sp,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Start
+                )
+            }
             TextView(
                 text = "By signing up, you agree to Ignite's Terms of Service and \n" +
                         "Privacy Policy.",
             )
             BaseButton(
-                onClick = {},
+                onClick = { onIntent(OnIntent.Submit) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 20.dp),
@@ -112,7 +151,7 @@ fun SignInScreen(onIntent: (OnIntent) -> Unit) {
                     text = "Don't have an account?",
                     size = 17.sp,
 
-                )
+                    )
                 Spacer(modifier = Modifier.width(10.dp))
                 TextView(
                     text = "Sign Up",
@@ -122,5 +161,6 @@ fun SignInScreen(onIntent: (OnIntent) -> Unit) {
                 )
             }
         }
+        LoadingOverlay(isLoading = state.isLoading)
     }
 }

@@ -86,7 +86,6 @@ fun Navigation() {
                             SignUpEvent.NavigateToLogin -> {
                                 backStack.add(Routes.SignInRoute)
                             }
-
                             is SignUpEvent.ShowError -> {}
                         }
                     }

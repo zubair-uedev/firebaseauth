@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.example.firebaseauth.R
 import com.example.firebaseauth.shared.components.BaseButton
 import com.example.firebaseauth.shared.components.HeaderSignIn
+import com.example.firebaseauth.shared.components.LoadingOverlay
 import com.example.firebaseauth.shared.components.TextFields
 import com.example.firebaseauth.shared.components.TextView
 
@@ -84,7 +85,6 @@ fun SignUpScreen(
                     onValueChange = { onIntent(SignUpIntent.EmailChange(it)) },
                     label = "Email Address",
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-//                    visualTransformation = VisualTransformation.None,
                     trailingIcon = {},
                     isError = state.emailError != null
                 )
@@ -99,10 +99,9 @@ fun SignUpScreen(
                     )
                 }
                 TextFields(
-                    value = state.confirmPassword,
+                    value = state.password,
                     onValueChange = { onIntent(SignUpIntent.PassWordChange(it)) },
                     label = "Enter password",
-                    // keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
@@ -191,6 +190,7 @@ fun SignUpScreen(
                     )
                 }
             }
+            LoadingOverlay(isLoading = state.isLoading)
         }
     }
 }
