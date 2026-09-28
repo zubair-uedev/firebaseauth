@@ -38,13 +38,11 @@ fun Navigation() {
                 val progress by splashViewModel.progress.collectAsState()
                 LaunchedEffect(Unit) {
                     splashViewModel.splashEvent.collect { events ->
-                        when (events) {
-                            SplashEvent.NavigateToOnBoard -> {
-                                backStack.add(
-                                    Routes.OnBoardRoute
-                                )
-                            }
-                        }
+                      when(events) {
+                          SplashEvent.NavigateToHome -> {}
+                          SplashEvent.NavigateToLogin -> {}
+                          SplashEvent.NavigateToOnBoard -> {}
+                      }
                     }
                 }
                 SplashScreen(progress = progress)
@@ -74,6 +72,9 @@ fun Navigation() {
                                     Routes.SignUpRoute
                                 )
                             }
+
+                            OnEvent.Authenticate -> {}
+                            is OnEvent.ShowError -> {}
                         }
                     }
                 }
@@ -85,9 +86,7 @@ fun Navigation() {
                 {
                     signUpViewModel.event.collect { event ->
                         when (event) {
-                            SignUpEvent.Authenticate -> {
-
-                            }
+                            SignUpEvent.Authenticate -> {}
                             SignUpEvent.NavigateToLogin -> {
                                 backStack.add(Routes.SignInRoute)
                             }

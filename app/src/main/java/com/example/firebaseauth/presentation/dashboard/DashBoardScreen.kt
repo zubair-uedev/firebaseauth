@@ -11,10 +11,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.firebaseauth.shared.components.AppAlertDialog
 import com.example.firebaseauth.shared.components.AppIconButton
+import com.example.firebaseauth.shared.components.AppTopBar
+import com.example.firebaseauth.shared.components.TextWithTextAlign
 
+@Preview(showBackground = true)
+@Composable
+fun DashBoardScreenPreview() {
+    DashBoardScreen(
+        onIntent = {}
+    )
+}
 
 @Composable
 fun DashBoardScreen(
@@ -62,4 +73,6 @@ fun DashBoardScreen(
         )
     }
 }
+
+
 

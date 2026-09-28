@@ -1,6 +1,6 @@
-package com.example.firebaseauth
+package com.example.firebaseauth.di
+
 import android.app.Application
-import com.example.firebaseauth.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
